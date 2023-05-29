@@ -35,6 +35,7 @@ class BaseSegmenter:
         if self.embedded:
             print('repeat embedding, please reset_image.')
             return
+
         self.predictor.set_image(image)
         self.embedded = True
         return

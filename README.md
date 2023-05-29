@@ -1,3 +1,63 @@
+# [track anything opencv backend]
+
+## Modifications and Improvements
+
+- 2023/05/29: Added tracker to the OpenCV backend.
+
+This project is a fork of [Track-Anything](https://github.com/gaomingqi/Track-Anything) made by [gaomingqi](https://github.com/gaomingqi). It incorporates the following modifications and improvements:
+
+This project is a significant modification from the original. Here are the key changes:
+
+1. **Changed Visualization Framework:** The project has switched from using Gradio to OpenCV for visual display. This offers a more direct and faster interface, providing improved speed and efficiency.
+
+2. **Enhanced Annotation:** In this modified version, users can perform video annotation easily and quickly within the OpenCV interface. This creates masks that serve as target annotations. If tracking errors occur, modifications can be made swiftly and conveniently. This annotation process was relatively slower in the Gradio-based version.
+
+3. **Usage with OpenCV Backend:** With the OpenCV backend, this project is user-friendly and powerful. Key operations include:
+    * Press 'p' to pause, which allows for annotation.
+    * While paused, you can annotate the image at the current 'Position'.
+    * Once annotation is completed, press 'g' to perform mask tracking (tracking continues till the 'End' frame).
+
+## Usage
+
+Here are the steps to get started with this project:
+
+1. **Step 1:** Clone this repository to your local machine.
+    ```bash
+    git clone https://github.com/zyan-repository/track-anything-opencv-backend.git
+    ```
+
+2. **Step 2:** Navigate to the project directory.
+    ```bash
+    cd track-anything-opencv-backend
+    ```
+
+3. **Step 3:** Install the necessary dependencies.
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. **Step 4:** Run the project.
+    ```bash
+    python opencv_backend.py --video_path your_video_path --mask_dir where_you_want_to_save_masks
+   # python opencv_backend.py --video_path your_video_path --mask_dir where_you_want_to_save_masks --sam_model_type vit_b  # for lower memory usage
+    ```
+<!--
+For more detailed information about using this project, please see the [User Guide](link to user guide).
+-->
+## Model Files
+
+Please download the models using the links provided:
+
+- vit_h: [Link to model](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth)
+- vit_l: [Link to model](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_l_0b3195.pth)
+- vit_b: [Link to model](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth)
+- XMem: [Link to model](https://github.com/hkchengrex/XMem/releases/download/v1.0/XMem-s012.pth)
+
+Once you have downloaded the model files, please place them in the `checkpoints` directory within your project path.
+
+Please see below for the original README from the [Track-Anything].
+
+---
 <!-- ![](./assets/track-anything-logo.jpg) -->
 
 <div align=center>

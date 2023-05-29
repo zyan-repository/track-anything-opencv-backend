@@ -47,13 +47,14 @@ class SamControler():
     
     
     def first_frame_click(self, image: np.ndarray, points:np.ndarray, labels: np.ndarray, multimask=True,mask_color=3):
-        '''
+        """
         it is used in first frame in video
         return: mask, logit, painted image(mask+point)
-        '''
-        # self.sam_controler.set_image(image)
-        origal_image = self.sam_controler.orignal_image
+        """
+        # origal_image = self.sam_controler.orignal_image
+        self.sam_controler.set_image(image)
         neg_flag = labels[-1]
+        # for neg_flag in labels:
         if neg_flag==1:
             #find neg
             prompts = {

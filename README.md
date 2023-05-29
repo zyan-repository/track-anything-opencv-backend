@@ -6,8 +6,6 @@
 
 This project is a fork of [Track-Anything](https://github.com/gaomingqi/Track-Anything) made by [gaomingqi](https://github.com/gaomingqi). It incorporates the following modifications and improvements:
 
-This project is a significant modification from the original. Here are the key changes:
-
 1. **Changed Visualization Framework:** The project has switched from using Gradio to OpenCV for visual display. This offers a more direct and faster interface, providing improved speed and efficiency.
 
 2. **Enhanced Annotation:** In this modified version, users can perform video annotation easily and quickly within the OpenCV interface. This creates masks that serve as target annotations. If tracking errors occur, modifications can be made swiftly and conveniently. This annotation process was relatively slower in the Gradio-based version.

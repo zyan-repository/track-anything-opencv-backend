@@ -1,4 +1,4 @@
-# [track anything opencv backend]
+# track anything opencv backend
 
 ## Modifications and Improvements
 

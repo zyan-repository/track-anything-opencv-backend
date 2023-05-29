@@ -55,7 +55,7 @@ Please download the models using the links provided:
 
 Once you have downloaded the model files, please place them in the `checkpoints` directory within your project path.
 
-Please see below for the original README from the [Track-Anything].
+Please see below for the original README from the [Track-Anything](https://github.com/gaomingqi/Track-Anything).
 
 ---
 <!-- ![](./assets/track-anything-logo.jpg) -->

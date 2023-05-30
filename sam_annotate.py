@@ -7,20 +7,9 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from tkinter import messagebox
-from tools.interact_tools import SamControler
+from tools.interact_tools import (SamControler, mask_color, mask_alpha, contour_color, contour_width, point_color_ne,
+                                  point_color_ps, point_alpha, point_radius, contour_color, contour_width)
 from tools.painter import mask_painter, point_painter
-
-
-mask_color = 3
-mask_alpha = 0.7
-contour_color = 1
-contour_width = 5
-point_color_ne = 8
-point_color_ps = 50
-point_alpha = 0.9
-point_radius = 15
-contour_color = 2
-contour_width = 5
 
 
 def parse_augment():

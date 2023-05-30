@@ -2,6 +2,8 @@
 
 ## Modifications and Improvements
 
+- 2023/05/31: Added the SAM annotation functionality in sam_annotate.py to the project.
+
 - 2023/05/29: Added tracker to the OpenCV backend.
 
 This project is a fork of [Track-Anything](https://github.com/gaomingqi/Track-Anything) made by [gaomingqi](https://github.com/gaomingqi). It incorporates the following modifications and improvements:
@@ -12,7 +14,7 @@ This project is a fork of [Track-Anything](https://github.com/gaomingqi/Track-An
 
 3. **Usage with OpenCV Backend:** With the OpenCV backend, this project is user-friendly and powerful. Key operations include:
     * Press 'p' to pause, which allows for annotation.
-    * While paused, you can annotate the image at the current 'Position'.
+    * While paused, you can annotate the image at the current 'Position'. Left-click for positive prompts and right-click for negative prompts.
     * Once annotation is completed, press 'g' to perform mask tracking (tracking continues till the 'End' frame).
 
 ## Usage

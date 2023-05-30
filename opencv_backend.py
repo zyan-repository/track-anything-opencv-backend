@@ -11,6 +11,8 @@ def parse_augment():
     parser = argparse.ArgumentParser()
     parser.add_argument('--video_path', type=str)
     parser.add_argument('--mask_dir', type=str)
+    parser.add_argument('--sam_checkpoint', type=str, default="checkpoints/sam_vit_h_4b8939.pth")
+    parser.add_argument('--xmem_checkpoint', type=str, default="checkpoints/XMem-s012.pth")
     parser.add_argument('--device', type=str, default="cuda:0")
     parser.add_argument('--sam_model_type', type=str, default="vit_h")
     args = parser.parse_args()
@@ -18,8 +20,8 @@ def parse_augment():
 
 
 args = parse_augment()
-sam_checkpoint = "checkpoints/sam_vit_h_4b8939.pth"
-xmem_checkpoint = "checkpoints/XMem-s012.pth"
+sam_checkpoint = args.sam_checkpoint
+xmem_checkpoint = args.xmem_checkpoint
 
 
 class TrackingAnything:

@@ -94,6 +94,7 @@ class Application:
         mask_file = os.path.join(self.mask_dir, self.filename + '.npy')
         if os.path.isfile(filepath):
             self.original_image = cv2.imread(filepath)
+            self.model.samcontroler.sam_controler.reset_image()
             image = Image.open(filepath)
             photo = ImageTk.PhotoImage(image)
             self.canvas.config(width=image.width, height=image.height)

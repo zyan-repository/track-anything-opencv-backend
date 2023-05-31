@@ -3,7 +3,10 @@ import cv2
 from tqdm import tqdm
 import argparse
 import numpy as np
-from tools.interact_tools import SamControler
+from PIL import Image
+from tools.interact_tools import (SamControler, mask_color, mask_alpha, contour_color, contour_width, point_color_ne,
+                                  point_color_ps, point_alpha, point_radius, contour_color, contour_width)
+from tools.painter import mask_painter, point_painter
 from tracker.base_tracker import BaseTracker
 
 
@@ -84,12 +87,12 @@ class VideoPlayer:
     def end_callback(self, pos):
         self.end_frame = pos
 
-    def display(self, mask_path, display_frame):
+    def display(self, mask_path, display_frame, mask_color=3):
         mask = np.load(mask_path)
-        colored_mask = np.zeros_like(display_frame)
-        colored_mask[mask == 1] = [0, 165, 255]  # set the mask to be orange
-        display_frame = cv2.addWeighted(display_frame, 0.7, colored_mask, 0.3, 0)
-        return display_frame
+        painted_image = mask_painter(display_frame, mask.astype('uint8'), mask_color,
+                                     mask_alpha, contour_color, contour_width)
+        return painted_image
+
 
     def collect_frames_and_apply_function(self):
         frames = []
@@ -112,14 +115,14 @@ class VideoPlayer:
         # Apply your custom function here
         masks, logits, painted_images = model.generator(frames, self.template_mask)
 
+        # clear GPU memory
+        model.xmem.clear_memory()
+
         # Save masks
         for i, mask in enumerate(masks):
             frame_number = self.current_frame_number + i
-            filename = f"{frame_number:05}.npy"  # Format the filename to have 6 digits
+            filename = f"{frame_number:06}.npy"  # Format the filename to have 6 digits
             np.save(os.path.join(self.mask_dir, filename), mask)
-
-        # clear GPU memory
-        model.xmem.clear_memory()
 
         # Set the current frame to the start frame
         self.cap.set(cv2.CAP_PROP_POS_FRAMES, self.current_frame_number)
@@ -129,7 +132,7 @@ class VideoPlayer:
         ret, display_frame = self.cap.read()
 
         display_frame = self.frame.copy()
-        mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:05}.npy")
+        mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:06}.npy")
         if os.path.exists(mask_path):
             display_frame = self.display(mask_path, display_frame)
 
@@ -145,26 +148,20 @@ class VideoPlayer:
                 self.points = np.concatenate((self.points, new_point))
                 new_label = np.asarray([1])  # Note it's a 1D array
                 self.labels = np.concatenate((self.labels, new_label))
-                # self.points.append((x, y))
-                # self.labels.append(1)
-                cv2.circle(self.frame, (x, y), 3, (0, 255, 0), -1)
+                display_frame = point_painter(display_frame, np.squeeze(self.points[np.argwhere(self.labels > 0)], axis=1), point_color_ne, point_alpha, point_radius, contour_color, contour_width)
             elif event == cv2.EVENT_RBUTTONDOWN:
                 new_point = np.asarray([(x, y)])  # It's a 2D array
                 self.points = np.concatenate((self.points, new_point))
                 new_label = np.asarray([0])  # Note it's a 1D array
                 self.labels = np.concatenate((self.labels, new_label))
-                cv2.circle(self.frame, (x, y), 3, (0, 0, 255), -1)
+                display_frame = point_painter(display_frame, np.squeeze(self.points[np.argwhere(self.labels < 1)], axis=1), point_color_ps, point_alpha, point_radius, contour_color, contour_width)
             if self.labels.shape[0] != 0:
                 mask, logit, painted_image = model.first_frame_click(cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB), self.points, self.labels)
-                filename = f"{self.current_frame_number:05}.npy"  # Format the filename to have 6 digits
+                filename = f"{self.current_frame_number:06}.npy"  # Format the filename to have 6 digits
+                display_frame = np.asarray(painted_image)
+                display_frame = cv2.cvtColor(display_frame, cv2.COLOR_RGB2BGR)
                 np.save(os.path.join(self.mask_dir, filename), mask)
-                # painted_image = cv2.cvtColor(np.array(painted_image), cv2.COLOR_RGB2BGR)
                 self.template_mask = mask
-                # self.frame = painted_image
-
-                mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:05}.npy")
-                if os.path.exists(mask_path):
-                    display_frame = self.display(mask_path, display_frame)
             cv2.imshow('Video', display_frame)
             print(self.points, self.labels)
 
@@ -184,7 +181,7 @@ class VideoPlayer:
                 self.clear_sam()
                 _, self.frame = self.cap.read()
                 display_frame = self.frame.copy()
-                mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:05}.npy")
+                mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:06}.npy")
                 if os.path.exists(mask_path):
                     display_frame = self.display(mask_path, display_frame)
                 cv2.imshow('Video', display_frame)
@@ -203,7 +200,7 @@ class VideoPlayer:
                     continue
 
                 display_frame = self.frame.copy()
-                mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:05}.npy")
+                mask_path = os.path.join(self.mask_dir, f"{self.current_frame_number:06}.npy")
 
                 if os.path.exists(mask_path):
                     display_frame = self.display(mask_path, display_frame)

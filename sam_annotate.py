@@ -117,6 +117,7 @@ class Application:
                 self.canvas.image = painted_image_tk
 
     def clear_all(self):
+        self.model.samcontroler.sam_controler.reset_image()
         # Clear all points and labels
         self.points = np.empty((0, 2))
         self.labels = np.empty(0)
